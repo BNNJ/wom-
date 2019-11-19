@@ -12,9 +12,9 @@
 
 ## Routine
 
-1. Parse file and dirs and place in a list and check validity
+1. Navigate through directories, select file
 2. Then use parse minilang to construct object
-3. Print error if any ( make list from error )
+3. Print errors if any
 4. Print list of avalaible services
 	- print elements keeping arborescence
 5. Launch script
