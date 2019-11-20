@@ -1,11 +1,14 @@
 {
 	"header" : "qemu-x86_64",
 	"name" : "Arch2019.11.01",
-	"version" : { 
-		"version": "latest", 
-		"options" : { 
-			"-smp" : "cpus=8,cores=8,threads=1,sockets=1", 
-			"-vga" : "vmware" 
+	"version" : {
+		"version": [ 
+			{
+				"latest": [
+					"-smp cpus=8,cores=8,threads=1,sockets=1", 
+					"-vga vmware"
+				]
 			}
-		}
+		]
+	}
 }
