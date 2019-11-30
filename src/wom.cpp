@@ -26,19 +26,22 @@ void	browse(fs::path file)
 	do
 	{
 		clear();
-		Menu		m;
-		for (auto const& f : fs::directory_iterator(file))
-			m.add_entry(f.path());
-		m.display();
-		file = control(m, file);
-		if (!is_directory(file))
+		Menu	m;
+		try
+		{
+			for (auto const& f : fs::directory_iterator(file))
+				m.add_entry(f.path());
+			m.display();
+			file = control(m, file);
+		}
+		catch (std::exception const& e)
 		{
 			clear();
-			std::string msg = "Do something with " + file.filename().native();
+			std::string msg = e.what();
 			print_menu_line(msg.c_str(), 0);
 			refresh();
+			file = file.parent_path().parent_path();
 			getch();
-			break ;
 		}
 	} while (!file.empty());
 }

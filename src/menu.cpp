@@ -20,24 +20,30 @@ void	Menu::clear()
 
 void	Menu::next_entry()
 {
-	highlight_off(current_entry);
-	if (current_entry == entries.size() - 1)
-		current_entry = 0;
-	else
-		++current_entry;
-	highlight_on(current_entry);
-	refresh();
+	if (!entries.empty())
+	{
+		highlight_off(current_entry);
+		if (current_entry == entries.size() - 1)
+			current_entry = 0;
+		else
+			++current_entry;
+		highlight_on(current_entry);
+		refresh();
+	}
 }
 
 void	Menu::prev_entry()
 {
-	highlight_off(current_entry);
-	if (current_entry == 0)
-		current_entry = entries.size() - 1;
-	else
-		--current_entry;
-	highlight_on(current_entry);
-	refresh();
+	if (!entries.empty())
+	{
+		highlight_off(current_entry);
+		if (current_entry == 0)
+			current_entry = entries.size() - 1;
+		else
+			--current_entry;
+		highlight_on(current_entry);
+		refresh();
+	}
 }
 
 entry	Menu::select() const
