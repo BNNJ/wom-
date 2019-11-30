@@ -1,43 +1,58 @@
 #include "menu.hpp"
-#include <ncurses.h>
 #include <iostream>
 
-using namespace menu;
+Menu::Menu() : current_entry(0) {}
 
-//Entry::Entry(std::filesystem::path const& p) : path(p), name(p.stem()) {}
-
-Menu::Menu(std::vector<std::filesystem::directory_entry> const& ent)
-	: entries(ent), current_entry(0)
+Menu::Menu(std::vector<entry> const& ent) : entries(ent), current_entry(0)
 {
 	display();
+}
+
+void	Menu::add_entry(entry const& ent)
+{
+	entries.push_back(ent);
+}
+
+void	Menu::clear()
+{
+	entries.clear();
 }
 
 void	Menu::next_entry()
 {
+	highlight_off(current_entry);
+//	std::cout << current_entry << std::endl;
 	if (current_entry == entries.size() - 1)
 		current_entry = 0;
 	else
 		++current_entry;
-	display();
+	highlight_on(current_entry);
+	refresh();
 }
 
 void	Menu::prev_entry()
 {
+	highlight_off(current_entry);
+//	std::cout << current_entry << std::endl;
 	if (current_entry == 0)
 		current_entry = entries.size() - 1;
 	else
 		--current_entry;
-	display();
+	highlight_on(current_entry);
+	refresh();
+}
+
+entry	Menu::select() const
+{
+	return (entries.at(current_entry));
 }
 
 void	Menu::display() const
 {
-	std::cout << "HELLO THIS IS MENU" << std::endl;
-	for (auto const& e : entries)
-		std::cout << static_cast<std::string>(e.path().stem()) << std::endl;
-}
-
-std::filesystem::directory_entry	Menu::select() const
-{
-	return (entries.at(current_entry));
+	for (std::vector<entry>::size_type i = 0; i < entries.size(); ++i)
+		print_menu_line(entries.at(i).stem(), i);
+	highlight_on(0);
+	refresh();
+//	for (std::vector<entry>::size_type i = 0; i < entries.size(); ++i)
+//		std::cout << entries.at(i).stem().c_str() << std::endl;
 }

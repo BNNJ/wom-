@@ -4,38 +4,26 @@
 #include <vector>
 #include <string>
 #include <filesystem>
+#include "display.hpp"
 
-namespace menu
-{
-/*
-class Entry
-{
-public:
-	Entry(std::filesystem::path const& p);
+using entry = std::filesystem::path;
 
-	std::string	get_name() const { return name; }
-	std::string	get_path() const { return path; }
-
-protected:
-	std::string				name;
-	std::filesystem::path	path;
-};
-*/
 class Menu
 {
-public:
-	Menu(std::vector<std::filesystem::directory_entry> const& ent);
+protected:
+	std::vector<entry>				entries;
+	std::vector<entry>::size_type	current_entry;
 
-	void	display() const;
+public:
+	Menu();
+	Menu(std::vector<entry> const& ent);
+
+	void	add_entry(entry const& ent);
+	void	clear();
 	void	next_entry();
 	void	prev_entry();
-	std::filesystem::directory_entry	select() const;
-
-protected:
-	std::vector<std::filesystem::directory_entry>				entries;
-	std::vector<std::filesystem::directory_entry>::size_type	current_entry;
+	entry	select() const;
+	void	display() const;
 };
-
-} /* end of namespace menu */
 
 #endif /* MENU_HPP */
