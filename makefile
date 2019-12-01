@@ -9,7 +9,7 @@ SOURCES		:=	$(shell find $(SRCDIR) -type f -name *.$(SRCEXT))
 OBJECTS		:=	$(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.o))
 #CPPFLAGS	:=	-lstdc++fs
 CFLAGS		:=	-std=c++17 -Wall -Wextra -Werror
-#LIB		:= 
+LIB			:=	-lncurses
 INC			:=	-I $(INCDIR)
 #INCLUDES	:=	$(INCDIR)/*
 
