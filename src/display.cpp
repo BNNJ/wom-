@@ -42,3 +42,18 @@ void	highlight_off(int y)
 {
 	mvchgat(y + y_offset, x_offset, menu_width, A_NORMAL, 0, NULL);
 }
+
+void	popup_message(std::string const& msg)
+{
+	WINDOW* popup = newwin(10, max_x - 30, y_offset, 15);
+	WINDOW* message = newwin(6, max_x - 34, y_offset + 1, 17);
+	box(popup, 0, 0);
+	wrefresh(popup);
+	wprintw(message, "%s\n", msg.c_str());
+	mvwprintw(message, 5, (max_x - 34) / 2 - 12, "press any key to continue");
+	wrefresh(message);
+	wgetch(popup);
+	delwin(popup);
+	delwin(message);
+	(void)msg;
+}

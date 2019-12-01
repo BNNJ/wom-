@@ -33,15 +33,20 @@ void	browse(fs::path file)
 				m.add_entry(f.path());
 			m.display();
 			file = control(m, file);
+			if (file.empty())
+				break ;
+			if (fs::is_regular_file(file))
+			{
+				popup_message("do something !");
+				file = file.parent_path();
+				refresh();
+			}
 		}
 		catch (std::exception const& e)
 		{
-			clear();
-			std::string msg = e.what();
-			print_menu_line(msg.c_str(), 0);
+			popup_message(e.what());
 			refresh();
-			file = file.parent_path().parent_path();
-			getch();
+			file = file.parent_path();
 		}
 	} while (!file.empty());
 }
