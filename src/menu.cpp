@@ -16,6 +16,7 @@ void	Menu::add_entry(entry const& ent)
 void	Menu::clear()
 {
 	entries.clear();
+	current_entry = 0;
 }
 
 void	Menu::next_entry()
@@ -48,18 +49,20 @@ void	Menu::prev_entry()
 
 entry	Menu::select() const
 {
+	if (entries.empty())
+		throw "Empty Directory";
 	return (entries.at(current_entry));
 }
 
 void	Menu::display() const
 {
 	if (entries.empty())
-		print_menu_line("Empty", 0);
+		print_menu_line("< Empty directory >", 0);
 	else
 	{
 		for (std::vector<entry>::size_type i = 0; i < entries.size(); ++i)
 			print_menu_line(entries.at(i).stem(), i);
-		highlight_on(0);
+		highlight_on(current_entry);
 	}
 	refresh();
 }

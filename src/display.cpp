@@ -49,10 +49,12 @@ void	popup_message(std::string const& msg)
 	WINDOW* message = newwin(6, max_x - 34, y_offset + 1, 17);
 	box(popup, 0, 0);
 	wrefresh(popup);
+
 	wprintw(message, "%s\n", msg.c_str());
 	mvwprintw(message, 5, (max_x - 34) / 2 - 12, "press any key to continue");
 	wrefresh(message);
-	wgetch(popup);
+	
+	wgetch(message);
 	delwin(popup);
 	delwin(message);
 	(void)msg;

@@ -5,50 +5,67 @@
 
 namespace fs = std::filesystem;
 
-entry	control(Menu& m, fs::path const& current)
+std::vector<entry>	list_files(fs::path const& file)
 {
-	int	c;
-	while ((c = getch()) != 'q')
+	std::vector<entry>	v;
+	try
 	{
-		switch (c)
-		{
-			case KEY_DOWN:	m.next_entry();				break;
-			case KEY_UP:	m.prev_entry();				break;
-			case KEY_LEFT:	return (current.parent_path());
-			case KEY_RIGHT:	return (m.select());
-		}
+		for (auto const& f : fs::directory_iterator(file))
+			v.push_back(f.path());
 	}
-	return ("");
+	catch (std::exception const& e)
+	{
+		throw;
+	}
+	return (v);
 }
 
 void	browse(fs::path file)
 {
-	do
+	Menu		m;
+	fs::path	current;
+
+	m.display(); refresh();
+	while (true)
 	{
-		clear();
-		Menu	m;
-		try
+		if (current != file)
 		{
-			for (auto const& f : fs::directory_iterator(file))
-				m.add_entry(f.path());
-			m.display();
-			file = control(m, file);
-			if (file.empty())
-				break ;
-			if (fs::is_regular_file(file))
+			try
 			{
-				popup_message("do something !");
-				file = file.parent_path();
+				std::vector<entry> entries = list_files(file);
+				clear();
+				m = Menu(entries);
+				m.display();
 				refresh();
+				current = file;
+			}
+			catch (std::exception const& e)
+			{
+				popup_message(e.what());
+				clear();
+				m.display();
+				refresh();
+				file = current;
 			}
 		}
-		catch (std::exception const& e)
+
+		bool loop_controls = true;
+		while (loop_controls)
 		{
-			popup_message(e.what());
-			refresh();
-			file = file.parent_path();
+			switch (getch())
+			{
+				case KEY_DOWN:	m.next_entry();				break;
+				case KEY_UP:	m.prev_entry();				break;
+				case KEY_LEFT:
+					file = current.parent_path();
+					loop_controls = false;					break;
+				case KEY_RIGHT:
+					try { file = m.select(); loop_controls = false; }
+					catch (...) { file = current; }			break;
+				case 'q':		/* Exit browser */			return;
+			}
 		}
-	} while (!file.empty());
+	}
 }
 
 int		main(int argc, char **argv)

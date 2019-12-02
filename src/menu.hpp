@@ -8,6 +8,14 @@
 
 using entry = std::filesystem::path;
 
+class EmptyMenuException : public std::exception
+{
+	const char* what() throw()
+	{
+		return ("Empty directory");
+	}
+};
+
 class Menu
 {
 protected:
